@@ -11,18 +11,28 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 import com.chainsys.util.ConnectionUtil;
-import com.chaisys.todomodel.DoctorTodoList;
+import  com.chainsys.todomodel.DoctorTodoList;
 public class NurseLogin 
 {
 	public static Scanner scanner=new Scanner(System.in);
 	public static int tokenNumber,patientAge,totalPatients;
-	public static String patientName,age,disease,nameOfDoctor,doctorCategory;
+	public static String userName,email,password,patientName,age,disease,nameOfDoctor,doctorCategory;
+	public static long phoneNo;
 //	public static LocalDate LocalTime;
 //	public static LocalTime timeNow;
 	public static DoctorTodoList doctor=new DoctorTodoList();
+	public static ToDoList todoList=new ToDoList();
 	static DoctorLogin doctorLogin=new DoctorLogin();
 //	public static ArrayList<LocalDate> date=new ArrayList<>();
 //	public static ArrayList<LocalTime> time=new ArrayList<>();
+	public static void login() throws ClassNotFoundException, SQLException
+	{
+		userName=ToDoList.userName();
+		phoneNo=ToDoList.phoneNo();
+		email=ToDoList.emailId();
+		password=ToDoList.password1();
+		todoList.signIn();
+	}
 	public  static void userInput() throws ClassNotFoundException, SQLException
 	{
 		boolean flag=true;
@@ -118,8 +128,9 @@ public class NurseLogin
 	}
 	public static boolean insertPatient() throws ClassNotFoundException, SQLException
 	{
-		LocalDate dateToday = LocalDate.now();
-		LocalTime timeNow = LocalTime.now();
+//		userName=doctor.getUsername();
+//		LocalDate dateToday = LocalDate.now();
+//		LocalTime timeNow = LocalTime.now();
 //		date.add(dateToday);
 //		time.add(timeNow);
 		NurseLogin.patientName();
@@ -136,7 +147,7 @@ public class NurseLogin
 		ResultSet resultSet=prepareStatement.executeQuery();
 		while(resultSet.next())
 		{
-			String name=resultSet.getString(1);
+			String name=resultSet.getString(3);
 			existingPatient.add(name);
 		}
 		if(existingPatient.contains(doctor.getPatientName()))
@@ -146,14 +157,18 @@ public class NurseLogin
 		}
 		else
 		{
-			String insert="insert into todo_list(patient_name,age,disease,doctor_name,doctor_category)values(?,?,?,?,?)";
+			String insert="insert into todo_list(username,phone_no,email_id,password,patient_name,age,disease,doctor_name,doctor_category)values(?,?,?,?,?,?,?,?,?)";
 			PreparedStatement prepareStatement1=connection.prepareStatement(insert);
 //			prepareStatement1.setDate(1,dateToday);
-			prepareStatement1.setString(1,doctor.getPatientName());
-			prepareStatement1.setInt(2, doctor.getAge());
-			prepareStatement1.setString(3, doctor.getDisease());
-			prepareStatement1.setString(4, doctor.getDoctorName());
-			prepareStatement1.setString(5, doctor.getDoctorCategory());
+			prepareStatement1.setString(1,userName);
+			prepareStatement1.setLong(2,phoneNo);
+			prepareStatement1.setString(3,email);
+			prepareStatement1.setString(4, password);
+			prepareStatement1.setString(5,doctor.getPatientName());
+			prepareStatement1.setInt(6, doctor.getAge());
+			prepareStatement1.setString(7, doctor.getDisease());
+			prepareStatement1.setString(8, doctor.getDoctorName());
+			prepareStatement1.setString(9, doctor.getDoctorCategory());
 			System.out.println("Patient details : "+doctor.getPatientName()+" "+doctor.getAge()+" "+doctor.getDisease());
 			int rows=prepareStatement1.executeUpdate();
 			return false;
@@ -181,14 +196,14 @@ public class NurseLogin
 	public static void displayAllPatients() throws ClassNotFoundException, SQLException
 	{
 		Connection connection=ConnectionUtil.getConnection();
-		String display="select * from todo_list";
+		String display="select patient_name,age,disease,doctor_name,doctor_category from todo_list";
 		PreparedStatement prepareStatement=connection.prepareStatement(display);
 		ResultSet resultSet=prepareStatement.executeQuery();
 		System.out.println("Patient Name\t\t\tPatient Age\t\tDisease\t\t\tDoctor Name\t\tDoctor Category");
 		System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------");
 		while(resultSet.next())
 		{
-			System.out.println(resultSet.getString(2)+"\t\t\t\t"+resultSet.getInt(3)+"\t\t\t"+resultSet.getString(4)+"\t\t\t"+resultSet.getString(5)+"\t\t\t"+resultSet.getString(6));
+			System.out.println(resultSet.getString(1)+"\t\t\t\t"+resultSet.getInt(2)+"\t\t\t"+resultSet.getString(3)+"\t\t\t"+resultSet.getString(4)+"\t\t\t"+resultSet.getString(5));
 		}
 //		NurseLogin.taskCount();
 	}

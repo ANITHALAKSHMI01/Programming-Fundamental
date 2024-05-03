@@ -1,6 +1,10 @@
 package com.chainsys.todomodel;
 public class DoctorTodoList 
 {
+	String username;
+	long phoneNo;
+	String email;
+	String password;
 	String patientName;
 	int age;
 	String disease;
@@ -9,6 +13,38 @@ public class DoctorTodoList
 	int totalPatients;
 	int visitedPatients;
 	int remainingPatients;
+	public String getUsername() 
+	{
+		return username;
+	}
+	public void setUsername(String username) 
+	{
+		this.username = username;
+	}
+	public long getPhoneNo()
+	{
+		return phoneNo;
+	}
+	public void setPhoneNo(long phoneNo)
+	{
+		this.phoneNo = phoneNo;
+	}
+	public String getEmail()
+	{
+		return email;
+	}
+	public void setEmail(String email) 
+	{
+		this.email = email;
+	}
+	public String getPassword() 
+	{
+		return password;
+	}
+	public void setPassword(String password)
+	{
+		this.password = password;
+	}
 	public String getPatientName() 
 	{
 		return patientName;
@@ -77,7 +113,8 @@ public class DoctorTodoList
 	@Override
 	public String toString() 
 	{
-		return "DoctorTodoList [patientName=" + patientName + ", age=" + age + ", disease=" + disease + ", doctorName="
+		return "DoctorTodoList [username=" + username + ", phoneNo=" + phoneNo + ", email=" + email + ", password="
+				+ password + ", patientName=" + patientName + ", age=" + age + ", disease=" + disease + ", doctorName="
 				+ doctorName + ", doctorCategory=" + doctorCategory + ", totalPatients=" + totalPatients
 				+ ", visitedPatients=" + visitedPatients + ", remainingPatients=" + remainingPatients + "]";
 	}	

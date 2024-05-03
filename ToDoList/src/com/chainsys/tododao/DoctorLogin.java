@@ -1,9 +1,8 @@
 package com.chainsys.tododao;
 import java.sql.SQLException;
 import java.util.Scanner;
-
-import com.chaisys.todomodel.DoctorTodoList;
-public class DoctorLogin implements ToDoDAO
+import  com.chainsys.todomodel.DoctorTodoList;
+public  class DoctorLogin implements ToDoDAO
 {
 	public static DoctorTodoList doctor=new DoctorTodoList();
 	public static Scanner scanner=new Scanner(System.in);
