@@ -1,4 +1,4 @@
-
+package com.chaisys.todomodel;
 public class DoctorTodoList 
 {
 	String patientName;
