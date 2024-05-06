@@ -11,7 +11,9 @@ public class ToDoList
 {
 	public static DoctorTodoList doctor=new DoctorTodoList();
 	public static ToDoList todoList=new ToDoList();
-	public static String emailId,nameOfDoctor,username,password;
+	public static ArrayList existingEmail = new ArrayList();
+	public static ArrayList existingPassword = new ArrayList();
+	public static String emailId,nameOfDoctor,username,email,password;
 	public static long phoneNo;
 	public static Scanner scanner=new Scanner(System.in);
 	public void signUp() throws ClassNotFoundException, SQLException
@@ -25,8 +27,9 @@ public class ToDoList
 				System.out.println("Nurse SignIn Page");
 			    System.out.println("````````````````"); 
 			    todoList.signIn();
+			    NurseLogin.userInput();
 			}
-			else
+			else if(ch=='n' || ch=='N')
 			{
 				  System.out.println("Nurse SignUp Page");
 			      System.out.println("````````````````"); 
@@ -35,6 +38,11 @@ public class ToDoList
 //			      ToDoList.userName();
 //			      ToDoList.phoneNo();
 //			      todoList.signIn();
+			}
+			else
+			{
+				System.out.println("Please enter Yes-'Y or y' No-'N or n'");
+				todoList.signUp();
 			}
 	    }
 		else
@@ -53,15 +61,20 @@ public class ToDoList
 			{
 				System.out.println("Doctor SignIn Page");
 			    System.out.println("````````````````"); 
-			    todoList.signIn(nameOfDoctor);
+			    todoList.signIn();
 			}
-			else
+			else if(ch=='n' || ch=='N')
 			{
 				System.out.println("Doctor SignUp Page");
 			    System.out.println("````````````````");
 			    NurseLogin.login();
 //				ToDoList.userName();
-				todoList.signIn(nameOfDoctor);
+//				todoList.signIn();
+			}
+			else
+			{
+				System.out.println("Please enter Yes-'Y or y' No-'N or n'");
+				todoList.signUp(nameOfDoctor);
 			}
 	    }
 		else
@@ -79,8 +92,8 @@ public class ToDoList
 		{
 		    ArrayList existingUsername = new ArrayList();
 	        Connection connection = ConnectionUtil.getConnection();
-	        String username = "select username from todo_list";
-	        PreparedStatement prepareStatement = connection.prepareStatement(username);
+	        String username2 = "select username from todo_register_login";
+	        PreparedStatement prepareStatement = connection.prepareStatement(username2);
 	        ResultSet resultSet = prepareStatement.executeQuery();
 	        while (resultSet.next()) 
 	        {
@@ -115,7 +128,7 @@ public class ToDoList
 		{
 			ArrayList existingPhoneNo = new ArrayList();
 			Connection connection = ConnectionUtil.getConnection();
-			String phoneNumber = "select phone_no from todo_list";
+			String phoneNumber = "select phone_no from todo_register_login";
 			PreparedStatement prepareStatement = connection.prepareStatement(phoneNumber);
 			ResultSet resultSet = prepareStatement.executeQuery();
 			while (resultSet.next()) 
@@ -144,14 +157,15 @@ public class ToDoList
 	}
 	public static String emailId() throws ClassNotFoundException, SQLException
 	{
+//		existingEmail.add("jansi01@ramar.rkhosp");
+//		existingEmail.add("nikilan@ani.rkhosp");
 		System.out.println("Enter the EmailId");
 		String email=scanner.next();
 		String regex="(^[a-z])[a-z0-9]+[@][a-z0-9]+\\.[a-zA-Z]{2,}";
 		if(email.matches(regex))
 		{
-			ArrayList existingEmail = new ArrayList();
 			Connection connection = ConnectionUtil.getConnection();
-			String emailId1 = "select email_id from todo_list";
+			String emailId1 = "select email_id from todo_register_login";
 			PreparedStatement prepareStatement = connection.prepareStatement(emailId1);
 			ResultSet resultSet = prepareStatement.executeQuery();
 			while (resultSet.next()) 
@@ -184,9 +198,8 @@ public class ToDoList
 		String regex="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@!#$%^&*]).{6}$";
 		if(password1.matches(regex))
 		{
-			ArrayList existingPassword = new ArrayList();
 			Connection connection = ConnectionUtil.getConnection();
-			String passWord = "select password from todo_list";
+			String passWord = "select password from todo_register_login";
 			PreparedStatement prepareStatement = connection.prepareStatement(passWord);
 			ResultSet resultSet = prepareStatement.executeQuery();
 			while (resultSet.next()) 
@@ -219,13 +232,15 @@ public class ToDoList
 	    System.out.println("Sign In");
 	    System.out.println("-------");
 		System.out.println("Enter the EmailId");
-		String email=scanner.next();
+		email=scanner.next();
 		String regex="(^[a-z])[a-z0-9]+[@][a-z0-9]+\\.[a-zA-Z]{2,}";
 		if(email.matches(regex))
 		{
-			ArrayList existingEmail = new ArrayList();
+//			doctor.setEmail(email);
+//			emailId=doctor.getEmail();
+////			ArrayList existingEmail = new ArrayList();
 			Connection connection = ConnectionUtil.getConnection();
-			String emailId1 = "select email_id from todo_list";
+			String emailId1 = "select email_id from todo_register_login";
 			PreparedStatement prepareStatement = connection.prepareStatement(emailId1);
 			ResultSet resultSet = prepareStatement.executeQuery();
 			while (resultSet.next()) 
@@ -254,30 +269,43 @@ public class ToDoList
 			todoList.signIn();
 		}
 	}
-	public void signIn(String doctorName) throws ClassNotFoundException, SQLException
-	{
-		System.out.println("Enter the EmailId");
-		String email=scanner.next();
-		String regex="(^[a-z])[a-z0-9]+[@][a-z0-9]+\\.[a-zA-Z]{2,}";
-		if(email.matches(regex))
-		{
-			if(email.equals("nikilan@ani.rkhosp")|| email.equals(emailId))
-			{
-				todoList.password(nameOfDoctor);
-			}
-			else
-			{
-				System.out.println("!!Please enter registered email");
-				todoList.signIn(nameOfDoctor);
-			}
-			
-		}
-		else
-		{
-			System.out.println("*Email should start with LowerCase,Don't use UpperCase inbetween also*");
-			todoList.signIn(nameOfDoctor);
-		}
-	}
+//	public void signIn(String doctorName) throws ClassNotFoundException, SQLException
+//	{
+//		System.out.println("Enter the EmailId");
+//		String email=scanner.next();
+//		String regex="(^[a-z])[a-z0-9]+[@][a-z0-9]+\\.[a-zA-Z]{2,}";
+//		if(email.matches(regex))
+//		{
+////			if(email.equals("nikilan@ani.rkhosp")|| email.equals(emailId))
+////			{
+////				todoList.password(nameOfDoctor);
+////			}
+//			Connection connection = ConnectionUtil.getConnection();
+//			String emailId1 = "select email_id from todo_list";
+//			PreparedStatement prepareStatement = connection.prepareStatement(emailId1);
+//			ResultSet resultSet = prepareStatement.executeQuery();
+//			while (resultSet.next()) 
+//			{
+//				String emailId2 = resultSet.getString(1);
+//				existingEmail.add(emailId2);
+//			}
+//			if(existingEmail.contains(emailId))
+//			{
+//				todoList.password();
+//			}
+//			else
+//			{
+//				System.out.println("!!Please enter registered email");
+//				todoList.signIn(nameOfDoctor);
+//			}
+//			
+//		}
+//		else
+//		{
+//			System.out.println("*Email should start with LowerCase,Don't use UpperCase inbetween also*");
+//			todoList.signIn(nameOfDoctor);
+//		}
+//	}
 	public void password() throws ClassNotFoundException, SQLException
 	{
 		System.out.println("Enter the password");
@@ -285,10 +313,13 @@ public class ToDoList
 		String regex="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@!#$%^&*]).{6}$";
 		if(password1.matches(regex))
 		{
-			ArrayList existingPassword = new ArrayList();
+//			doctor.setPassword(password1);
+//			password=doctor.getPassword();
+////			ArrayList existingPassword = new ArrayList();
 			Connection connection = ConnectionUtil.getConnection();
-			String passWord = "select password from todo_list";
+			String passWord = "select password from todo_register_login where email_id=?";
 			PreparedStatement prepareStatement = connection.prepareStatement(passWord);
+			prepareStatement.setString(1, email);
 			ResultSet resultSet = prepareStatement.executeQuery();
 			while (resultSet.next()) 
 			{
@@ -298,12 +329,11 @@ public class ToDoList
 			if(existingPassword.contains(password1))
 			{			
 				System.out.println("Sign In Successfully...");
-        		NurseLogin.userInput();
 			}
 //			if(password1.equals("Jan12#") || password1.equals(password))
 //			{
 //				System.out.println("Sign In Successfully...");
-////				NurseLogin.userInput();
+//				NurseLogin.userInput();
 //			}
 			else
 			{
@@ -318,29 +348,29 @@ public class ToDoList
 			todoList.password();
 		}
 	}
-	public void password(String doctorName) throws ClassNotFoundException, SQLException
-	{
-		System.out.println("Enter the password");
-		String password1=scanner.next();
-		String regex="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@!#$%^&*]).{6}$";
-		if(password1.matches(regex))
-		{
-			if(password1.equals("Nik05*")  || password1.equals(password))
-			{
-				System.out.println("Sign In Successfully...");
-			}
-			else
-			{
-				System.out.println("!!Please enter registered password");
-				todoList.password(nameOfDoctor);
-			}
-			
-		}
-		else
-		{
-			System.out.println("*Password should contain atleast one UpperCase,LowerCase,Number and Special Character*");
-			System.out.println("*Password must be 6 characters*");
-			todoList.password();
-		}
-	}
+//	public void password(String doctorName) throws ClassNotFoundException, SQLException
+//	{
+//		System.out.println("Enter the password");
+//		String password1=scanner.next();
+//		String regex="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@!#$%^&*]).{6}$";
+//		if(password1.matches(regex))
+//		{
+//			if(password1.equals("Nik05*")  || password1.equals(password))
+//			{
+//				System.out.println("Sign In Successfully...");
+//			}
+//			else
+//			{
+//				System.out.println("!!Please enter registered password");
+//				todoList.password(nameOfDoctor);
+//			}
+//			
+//		}
+//		else
+//		{
+//			System.out.println("*Password should contain atleast one UpperCase,LowerCase,Number and Special Character*");
+//			System.out.println("*Password must be 6 characters*");
+//			todoList.password();
+//		}
+//	}
 }

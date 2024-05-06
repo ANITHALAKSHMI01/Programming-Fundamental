@@ -1,7 +1,10 @@
 package com.chainsys.tododao;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Scanner;
 import  com.chainsys.todomodel.DoctorTodoList;
+import com.chainsys.util.ConnectionUtil;
 public  class DoctorLogin implements ToDoDAO
 {
 	public static DoctorTodoList doctor=new DoctorTodoList();
@@ -37,13 +40,48 @@ public  class DoctorLogin implements ToDoDAO
 		}
 		return doctor1;
 	}
+	public static String updateDoctor() throws ClassNotFoundException, SQLException
+	{
+//		Connection connection=ConnectionUtil.getConnection();
+//		String update="update todo_list set doctor_name='Jansi' where doctor_name='Nikilan'";
+//		PreparedStatement prepareStatement=connection.prepareStatement(update);
+//		prepareStatement.executeUpdate();
+		System.out.println("Enter Doctor Name");
+		doctorName=scanner.nextLine();
+		String regex="^[a-zA-Z\\s.]*$";
+		if(doctorName.matches(regex))
+		{
+			doctor.setDoctorName(doctorName);
+		}
+		else
+		{
+			System.out.println("Name should be alphabet");
+			DoctorLogin.updateDoctor();
+		}
+		return doctorName;
+	}
 	@Override
 	public String doctorCategory() 
 	{
 		doctor.setDoctorCategory("General");
 		return doctorCategory=doctor.getDoctorCategory();
 	}
-
+	public static String updateDoctorCategory()
+	{
+		System.out.println("Enter Doctor Category");
+		doctorCategory=scanner.nextLine();
+		String regex="^[a-zA-Z\\s]*$";
+		if(doctorCategory.matches(regex))
+		{
+			doctor.setDoctorCategory(doctorCategory);
+		}
+		else
+		{
+			System.out.println("Doctor Category should be alphabet");
+			DoctorLogin.updateDoctorCategory();
+		}
+		return doctorCategory;
+	}
 	@Override
 	public void doctorLogin() throws ClassNotFoundException, SQLException
 	{
