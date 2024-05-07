@@ -1,6 +1,7 @@
 package com.chainsys.tododao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 import  com.chainsys.todomodel.DoctorTodoList;
@@ -42,10 +43,6 @@ public  class DoctorLogin implements ToDoDAO
 	}
 	public static String updateDoctor() throws ClassNotFoundException, SQLException
 	{
-//		Connection connection=ConnectionUtil.getConnection();
-//		String update="update todo_list set doctor_name='Jansi' where doctor_name='Nikilan'";
-//		PreparedStatement prepareStatement=connection.prepareStatement(update);
-//		prepareStatement.executeUpdate();
 		System.out.println("Enter Doctor Name");
 		doctorName=scanner.nextLine();
 		String regex="^[a-zA-Z\\s.]*$";
@@ -109,6 +106,16 @@ public  class DoctorLogin implements ToDoDAO
 		System.out.println("Patients Waiting    :"+doctor.getRemainingPatients());
 		System.out.println("Remaining Patients List");
 		System.out.println("========================");
-		NurseLogin.displayAllPatients();
+		Connection connection=ConnectionUtil.getConnection();
+		String display="select date,appointed_on,patient_name,age,phone_no,disease,doctor_name,doctor_category from todo_list where status='Unvisited'";
+		PreparedStatement prepareStatement2=connection.prepareStatement(display);
+		ResultSet resultSet=prepareStatement2.executeQuery();
+		System.out.println("Date\t\tAppointed on\t\tPatient Name\t\t\tPatient Age\t\tPhoneNo\t\tDisease\t\t\tDoctor Name\t\tDoctor Category");
+		System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+		while(resultSet.next())
+		{
+			System.out.println(resultSet.getString(1)+"\t"+resultSet.getString(2)+"\t\t"+resultSet.getString(3)+"\t\t\t\t"+resultSet.getInt(4)+"\t\t\t"+resultSet.getLong(5)+"\t"+resultSet.getString(6)+"\t\t\t"+resultSet.getString(7)+"\t\t\t"+resultSet.getString(8));
+		}
+//		NurseLogin.displayAllPatients();
 	}
 }

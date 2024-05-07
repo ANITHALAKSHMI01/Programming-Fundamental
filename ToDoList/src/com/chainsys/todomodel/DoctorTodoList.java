@@ -5,6 +5,7 @@ public class DoctorTodoList
 	long phoneNo;
 	String email;
 	String password;
+	String role;
 	String patientName;
 	int age;
 	String disease;
@@ -13,6 +14,7 @@ public class DoctorTodoList
 	int totalPatients;
 	int visitedPatients;
 	int remainingPatients;
+	String status;
 	public String getUsername() 
 	{
 		return username;
@@ -44,6 +46,14 @@ public class DoctorTodoList
 	public void setPassword(String password)
 	{
 		this.password = password;
+	}
+	public String getRole() 
+	{
+		return role;
+	}
+	public void setRole(String role) 
+	{
+		this.role = role;
 	}
 	public String getPatientName() 
 	{
@@ -110,12 +120,21 @@ public class DoctorTodoList
 	{
 		this.doctorCategory = doctorCategory;
 	}
+	public String getStatus() 
+	{
+		return status;
+	}
+	public void setStatus(String status) 
+	{
+		this.status = status;
+	}
 	@Override
 	public String toString() 
 	{
 		return "DoctorTodoList [username=" + username + ", phoneNo=" + phoneNo + ", email=" + email + ", password="
-				+ password + ", patientName=" + patientName + ", age=" + age + ", disease=" + disease + ", doctorName="
-				+ doctorName + ", doctorCategory=" + doctorCategory + ", totalPatients=" + totalPatients
-				+ ", visitedPatients=" + visitedPatients + ", remainingPatients=" + remainingPatients + "]";
+				+ password + ", role=" + role + ", patientName=" + patientName + ", age=" + age + ", disease=" + disease
+				+ ", doctorName=" + doctorName + ", doctorCategory=" + doctorCategory + ", totalPatients="
+				+ totalPatients + ", visitedPatients=" + visitedPatients + ", remainingPatients=" + remainingPatients
+				+ ", status=" + status + "]";
 	}	
 }

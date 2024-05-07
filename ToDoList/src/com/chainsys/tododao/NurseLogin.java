@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import com.chainsys.util.ConnectionUtil;
@@ -14,8 +15,8 @@ import  com.chainsys.todomodel.DoctorTodoList;
 public class NurseLogin 
 {
 	public static Scanner scanner=new Scanner(System.in);
-	public static int tokenNumber,patientAge,totalPatients;
-	public static String userName,email,password,patientName,age,PhoneNumber,disease,nameOfDoctor,doctorCategory;
+	public static int tokenNumber,patientAge,totalPatients,count;
+	public static String userName,email,password,role,patientName,age,PhoneNumber,disease,nameOfDoctor,doctorCategory,status;
 	public static long phoneNo;
 	public static Date dateToday;
 	public static DoctorTodoList doctor=new DoctorTodoList();
@@ -27,13 +28,32 @@ public class NurseLogin
 		phoneNo=ToDoList.phoneNo();
 		email=ToDoList.emailId();
 		password=ToDoList.password1();
+		role=ToDoList.role();
 		Connection connection=ConnectionUtil.getConnection();
-		String insert="insert into todo_register_login(username,phone_no,email_id,password)values(?,?,?,?)";
+		String insert="insert into todo_register_login(username,phone_no,email_id,password,role)values(?,?,?,?,?)";
 		PreparedStatement prepareStatement1=connection.prepareStatement(insert);
 		prepareStatement1.setString(1,userName);
 		prepareStatement1.setLong(2,phoneNo);
 		prepareStatement1.setString(3,email);
 		prepareStatement1.setString(4, password);
+		prepareStatement1.setString(5,role);
+		int rows=prepareStatement1.executeUpdate();
+	}
+	public static void login(String doctorName) throws ClassNotFoundException, SQLException
+	{
+		userName=ToDoList.userName();
+		phoneNo=ToDoList.phoneNo();
+		email=ToDoList.emailId();
+		password=ToDoList.password1();
+		role=ToDoList.role(nameOfDoctor);
+		Connection connection=ConnectionUtil.getConnection();
+		String insert="insert into todo_register_login(username,phone_no,email_id,password,role)values(?,?,?,?,?)";
+		PreparedStatement prepareStatement1=connection.prepareStatement(insert);
+		prepareStatement1.setString(1,userName);
+		prepareStatement1.setLong(2,phoneNo);
+		prepareStatement1.setString(3,email);
+		prepareStatement1.setString(4, password);
+		prepareStatement1.setString(5,role);
 		int rows=prepareStatement1.executeUpdate();
 	}
 	public  static void userInput() throws ClassNotFoundException, SQLException
@@ -59,11 +79,10 @@ public class NurseLogin
 				           break;
 				case 4    :NurseLogin.updatePatientdetail();
 						   break;
-//				case 5    :DoctorLogin.updateDoctor();
-//				           System.out.println("*****Update Successfully*****");
-//					       break;
 				case 5    :flag=false;
 				           System.out.println("Exit successfully...");
+				           DoctorLogin doctor=new DoctorLogin();
+				   	       doctor.doctorLogin();
 				           break;
 				default  :System.out.println("*Please enter choice 1-5*");
 				          NurseLogin.userInput();
@@ -121,7 +140,14 @@ public class NurseLogin
 	public static long phoneNo() throws ClassNotFoundException, SQLException
 	{
 		System.out.println("Enter patient contact number");
-		phoneNo=scanner.nextLong();
+		try 
+		{
+			phoneNo=scanner.nextLong();
+		}
+		catch(InputMismatchException i1)
+		{
+			i1.getMessage();
+		}
 		scanner.nextLine();
 		PhoneNumber=Long.toString(phoneNo);
 		String regex="(91|0)?[6-9][0-9]{9}$";
@@ -184,38 +210,21 @@ public class NurseLogin
 		doctor.setDoctorName(nameOfDoctor);
 		doctorCategory=doctorLogin.doctorCategory();
 		doctor.setDoctorCategory(doctorCategory);
-//		ArrayList existingPatient=new ArrayList();
+		doctor.setStatus("Unvisited");
 		Connection connection=ConnectionUtil.getConnection();
-//		String checkPatient="select patient_name from todo_list";
-//		PreparedStatement prepareStatement=connection.prepareStatement(checkPatient);
-//		ResultSet resultSet=prepareStatement.executeQuery();
-//		while(resultSet.next())
-//		{
-//			String name=resultSet.getString(1);
-//			existingPatient.add(name);
-//		}
-//		if(existingPatient.contains(doctor.getPatientName()))
-//		{
-//			 System.out.println("name already exist");
-//	         return true;
-//		}
-//		else
-//		{
-//			String insert="insert into todo_list(username,phone_no,email_id,password,patient_name,age,disease,doctor_name,doctor_category)values(?,?,?,?,?,?,?,?,?)";
-			String insert="insert into todo_list(date,appointed_on,patient_name,age,phone_no,disease,doctor_name,doctor_category)values(?,?,?,?,?,?,?,?)";
-			PreparedStatement prepareStatement1=connection.prepareStatement(insert);
-			prepareStatement1.setString(1, dateString);
-			prepareStatement1.setString(2,timeString);
-			prepareStatement1.setString(3,doctor.getPatientName());
-			prepareStatement1.setInt(4, doctor.getAge());
-			prepareStatement1.setLong(5,doctor.getPhoneNo());
-			prepareStatement1.setString(6, doctor.getDisease());
-			prepareStatement1.setString(7, doctor.getDoctorName());
-			prepareStatement1.setString(8, doctor.getDoctorCategory());
-			System.out.println("Patient details : "+doctor.getPatientName()+" "+doctor.getAge()+" "+doctor.getDisease());
-			int rows=prepareStatement1.executeUpdate();
-//			return false;
-//		}
+		String insert="insert into todo_list(date,appointed_on,patient_name,age,phone_no,disease,doctor_name,doctor_category,status)values(?,?,?,?,?,?,?,?,?)";
+		PreparedStatement prepareStatement1=connection.prepareStatement(insert);
+		prepareStatement1.setString(1, dateString);
+		prepareStatement1.setString(2,timeString);
+		prepareStatement1.setString(3,doctor.getPatientName());
+		prepareStatement1.setInt(4, doctor.getAge());
+		prepareStatement1.setLong(5,doctor.getPhoneNo());
+		prepareStatement1.setString(6, doctor.getDisease());
+		prepareStatement1.setString(7, doctor.getDoctorName());
+		prepareStatement1.setString(8, doctor.getDoctorCategory());
+		prepareStatement1.setString(9, doctor.getStatus());
+		System.out.println("Patient details : "+doctor.getPatientName()+" "+doctor.getAge()+" "+doctor.getDisease());
+		int rows=prepareStatement1.executeUpdate();
 	}
 	public static List<DoctorTodoList> listOfPatients() throws ClassNotFoundException, SQLException
 	{
@@ -348,7 +357,6 @@ public class NurseLogin
 			System.out.println("=>Token Number should be positive and numeric");
 			NurseLogin.updatePatientdetail();
 		}
-//		String disease=NurseLogin.disease();
 	}
 	public static int taskCount() throws SQLException, ClassNotFoundException
 	{
@@ -365,27 +373,49 @@ public class NurseLogin
 	}
 	public static int visitedPatients() throws ClassNotFoundException, SQLException
 	{
-		int count=0;
+		Connection connection=ConnectionUtil.getConnection();
+		String total="select count(*) from todo_list where status='Visited'"; 
+		PreparedStatement prepareStatement1=connection.prepareStatement(total);
+		ResultSet rs =prepareStatement1.executeQuery();
+		while(rs.next()) 
+		{ 
+			doctor.setVisitedPatients(rs.getInt(1));
+			count=doctor.getVisitedPatients();
+		}
 		System.out.println("Did you complete any patient checkup(Yes-'Y or y' No-'N or n')");
 		char ch=scanner.next().charAt(0);
-		if(ch=='y' || ch=='Y' || ch=='n' || ch=='N')
+		if(ch=='y' || ch=='Y')
 		{
-			if(ch=='y' || ch=='Y')
+			System.out.println("Enter token no for updation");
+			String tokenNo=scanner.next();
+			String regex="\\d";
+			if(tokenNo.matches(regex))
 			{
-				NurseLogin.removePatient();
-				count++;
+				tokenNumber=Integer.parseInt(tokenNo);
+				scanner.nextLine();
+				String update="update todo_list set status='Visited' where s_no=?";
+				PreparedStatement prepareStatement=connection.prepareStatement(update);
+				prepareStatement.setInt(1, tokenNumber);
+				prepareStatement.executeUpdate();	
+//				count++;
 			}
-			else
+			else if(ch=='n' || ch=='N')
 			{
 				System.out.println("You didn't checkup patient...");
 			}
-		}
-		else
-		{
-			System.out.println("Please enter Yes-'Y or y' No-'N or n'");
-			NurseLogin.visitedPatients();
+			else
+			{
+				try
+				{
+					throw new InvalidData();
+				}
+				catch(InvalidData i1)
+				{
+					System.out.println(i1.getMessage());
+				}
+				NurseLogin.visitedPatients();
+			}
 		}
 		return count;
 	}
-
 }
