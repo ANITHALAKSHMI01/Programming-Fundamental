@@ -15,6 +15,10 @@ public class DoctorTodoList
 	int visitedPatients;
 	int remainingPatients;
 	String status;
+	public DoctorTodoList()
+	{
+		
+	}
 	public String getUsername() 
 	{
 		return username;

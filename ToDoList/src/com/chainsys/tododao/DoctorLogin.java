@@ -1,12 +1,12 @@
 package com.chainsys.tododao;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+//import java.sql.Connection;
+//import java.sql.PreparedStatement;
+//import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.util.Scanner;
 import  com.chainsys.todomodel.DoctorTodoList;
-import com.chainsys.util.ConnectionUtil;
+//import com.chainsys.util.ConnectionUtil;
 public  class DoctorLogin implements ToDoDAO
 {
 	public static DoctorTodoList doctor=new DoctorTodoList();
@@ -86,7 +86,7 @@ public  class DoctorLogin implements ToDoDAO
 		System.out.println("Doctor's Login Page");
 		System.out.println("...................");
 		todoList.signUp(doctorName);
-		DoctorLogin.reminder();
+//		DoctorLogin.reminder();
 	}
 	public static void reminder() throws ClassNotFoundException, SQLException
 	{

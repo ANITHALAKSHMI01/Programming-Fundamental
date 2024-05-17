@@ -13,7 +13,8 @@ public class ToDoList
 	public static DoctorTodoList doctor=new DoctorTodoList();
 	public static ToDoList todoList=new ToDoList();
 	public static ArrayList<String> existingEmail = new ArrayList<String>();
-	public static ArrayList existingPassword = new ArrayList();
+	public static ArrayList<String> existingPassword = new ArrayList<>();
+	public static ArrayList<String> existingDoctor = new ArrayList<>();
 	static DoctorLogin doctorlogin=new DoctorLogin();
 	public static String emailId,nameOfDoctor,username,email,password,role;
 	public static long phoneNo,phoneNo1;
@@ -90,7 +91,7 @@ public class ToDoList
 		String regex="^[a-zA-Z0-9]*";
 		if(username1.matches(regex))
 		{
-		    ArrayList existingUsername = new ArrayList();
+		    ArrayList<String> existingUsername = new ArrayList<>();
 	        Connection connection = ConnectionUtil.getConnection();
 	        String username2 = "select username from todo_register_login";
 	        PreparedStatement prepareStatement = connection.prepareStatement(username2);
@@ -134,7 +135,7 @@ public class ToDoList
 		String regex="(91|0)?[6-9][0-9]{9}$";
 		if(stringPhoneNo.matches(regex))
 		{
-			ArrayList existingPhoneNo = new ArrayList();
+			ArrayList<String> existingPhoneNo = new ArrayList<>();
 			Connection connection = ConnectionUtil.getConnection();
 			String phoneNumber = "select phone_no from todo_register_login";
 			PreparedStatement prepareStatement = connection.prepareStatement(phoneNumber);
@@ -369,6 +370,7 @@ public class ToDoList
 			if(existingPassword.contains(password1))
 			{	
 				System.out.println("Sign In Successfully...");
+				DoctorLogin.reminder();
 		    }
 			else
 			{
@@ -447,16 +449,16 @@ public class ToDoList
 	public static void displayDetails() throws SQLException, ClassNotFoundException
 	{
 		Connection connection=ConnectionUtil.getConnection();
-		String display="select date,appointed_on,patient_name,age,phone_no,disease,doctor_name,doctor_category,status from todo_list where status='Unvisited' && doctor_name=?";
-			PreparedStatement prepareStatement2=connection.prepareStatement(display);
-			prepareStatement2.setString(1, nameOfDoctor);
-			ResultSet resultSet1=prepareStatement2.executeQuery();
-			System.out.println("Date\t\tAppointed on\t\tPatient Name\t\t\tPatient Age\t\tPhoneNo\t\tDisease\t\t\tDoctor Name\t\tDoctor Category\t\tStatus");
-			System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-			while(resultSet1.next())
-			{
-				System.out.println(resultSet1.getString(1)+"\t"+resultSet1.getString(2)+"\t\t"+resultSet1.getString(3)+"\t\t\t\t"+resultSet1.getInt(4)+"\t\t\t"+resultSet1.getLong(5)+"\t"+resultSet1.getString(6)+"\t\t\t"+resultSet1.getString(7)+"\t\t\t"+resultSet1.getString(8)+"\t\t\t"+resultSet1.getString(9));
-			}
+		String display="select s_no,date,appointed_on,patient_name,age,phone_no,disease,doctor_name,doctor_category,status from todo_list where status='Unvisited' && doctor_name=?";
+		PreparedStatement prepareStatement2=connection.prepareStatement(display);
+		prepareStatement2.setString(1, nameOfDoctor);
+		ResultSet resultSet1=prepareStatement2.executeQuery();
+		System.out.println("Token\\t\\tDate\t\tAppointed on\t\tPatient Name\t\t\tPatient Age\t\tPhoneNo\t\tDisease\t\t\tDoctor Name\t\tDoctor Category\t\tStatus");
+		System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+		while(resultSet1.next())
+		{
+			System.out.println(resultSet1.getInt(1)+"\t\t"+resultSet1.getString(2)+"\t"+resultSet1.getString(3)+"\t\t"+resultSet1.getString(4)+"\t\t\t\t"+resultSet1.getInt(5)+"\t\t\t"+resultSet1.getLong(6)+"\t"+resultSet1.getString(7)+"\t\t\t"+resultSet1.getString(8)+"\t\t\t"+resultSet1.getString(9)+"\t\t\t"+resultSet1.getString(10));
+		}
 	}
 	public static int taskCount() throws SQLException, ClassNotFoundException
 	{

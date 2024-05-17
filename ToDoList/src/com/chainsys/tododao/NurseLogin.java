@@ -36,7 +36,7 @@ public class NurseLogin
 		prepareStatement1.setString(3,email);
 		prepareStatement1.setString(4, password);
 		prepareStatement1.setString(5,role);
-		int rows=prepareStatement1.executeUpdate();
+		prepareStatement1.executeUpdate();
 	}
 	public static void signUpDetails(String doctorName) throws ClassNotFoundException, SQLException
 	{
@@ -55,7 +55,7 @@ public class NurseLogin
 		prepareStatement1.setString(4,email);
 		prepareStatement1.setString(5, password);
 		prepareStatement1.setString(6,role);
-		int rows=prepareStatement1.executeUpdate();
+		prepareStatement1.executeUpdate();
 	}
 	public  static void userInput() throws ClassNotFoundException, SQLException
 	{
@@ -63,7 +63,7 @@ public class NurseLogin
 		while(flag)
 		{
 			int choice=0;
-			System.out.println("1.AddPatient\n2.removePatient\n3.DisplayAllPatients\n4.UpdatePatientDetails\n5.Quit");
+			System.out.println("1.Add Patient\n2.Remove Patient\n3.Display All Patients\n4.Update Patient Details\n5.Quit");
 			System.out.println("Please make a choice");
 			try
 			{
@@ -166,7 +166,7 @@ public class NurseLogin
 		String regex="(91|0)?[6-9][0-9]{9}$";
 		if(PhoneNumber.matches(regex))
 		{
-			ArrayList existingPhoneNo = new ArrayList();
+			ArrayList<String> existingPhoneNo = new ArrayList<>();
 			Connection connection = ConnectionUtil.getConnection();
 			String phoneNumber = "select phone_no from todo_list";
 			PreparedStatement prepareStatement = connection.prepareStatement(phoneNumber);
@@ -237,19 +237,19 @@ public class NurseLogin
 		prepareStatement1.setString(8, doctor.getDoctorCategory());
 		prepareStatement1.setString(9, doctor.getStatus());
 		System.out.println("Patient details : "+doctor.getPatientName()+" "+doctor.getAge()+" "+doctor.getDisease());
-		int rows=prepareStatement1.executeUpdate();
+		prepareStatement1.executeUpdate();
 	}
 	public static void displayAllPatients() throws ClassNotFoundException, SQLException
 	{
 		Connection connection=ConnectionUtil.getConnection();
-		String display="select date,appointed_on,patient_name,age,phone_no,disease,doctor_name,doctor_category,status from todo_list";
+		String display="select s_no,date,appointed_on,patient_name,age,phone_no,disease,doctor_name,doctor_category,status from todo_list";
 		PreparedStatement prepareStatement=connection.prepareStatement(display);
 		ResultSet resultSet=prepareStatement.executeQuery();
-		System.out.println("Date\t\tAppointed on\t\tPatient Name\t\t\tPatient Age\t\tPhoneNo\t\tDisease\t\t\tDoctor Name\t\tDoctor Category\t\tStatus");
-		System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+		System.out.println("Token\t\tDate\t\tAppointed on\t\tPatient Name\t\t\tPatient Age\t\tPhoneNo\t\tDisease\t\t\tDoctor Name\t\tDoctor Category\t\tStatus");
+		System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 		while(resultSet.next())
 		{
-			System.out.println(resultSet.getString(1)+"\t"+resultSet.getString(2)+"\t\t"+resultSet.getString(3)+"\t\t\t\t"+resultSet.getInt(4)+"\t\t\t"+resultSet.getLong(5)+"\t"+resultSet.getString(6)+"\t\t\t"+resultSet.getString(7)+"\t\t\t"+resultSet.getString(8)+"\t\t\t"+resultSet.getString(9));
+			System.out.println(resultSet.getInt(1)+"\t\t"+resultSet.getString(2)+"\t"+resultSet.getString(3)+"\t\t"+resultSet.getString(4)+"\t\t\t\t"+resultSet.getInt(5)+"\t\t\t"+resultSet.getLong(6)+"\t"+resultSet.getString(7)+"\t\t\t"+resultSet.getString(8)+"\t\t\t"+resultSet.getString(9)+"\t\t\t"+resultSet.getString(10));
 		}
 	}
 	public static void removePatient() throws ClassNotFoundException, SQLException
