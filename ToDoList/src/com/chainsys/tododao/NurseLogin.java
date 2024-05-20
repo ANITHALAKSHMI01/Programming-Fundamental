@@ -29,32 +29,13 @@ public class NurseLogin
 		password=ToDoList.password1();
 		role=ToDoList.role();
 		Connection connection=ConnectionUtil.getConnection();
-		String insert="insert into todo_register_login(username,doctor_name,phone_no,email_id,password,role)values(?,?,?,?,?,?)";
+		String insert="insert into todo_register_login(username,phone_no,email_id,password,role)values(?,?,?,?,?)";
 		PreparedStatement prepareStatement1=connection.prepareStatement(insert);
 		prepareStatement1.setString(1,userName);
 		prepareStatement1.setLong(2,phoneNo);
 		prepareStatement1.setString(3,email);
 		prepareStatement1.setString(4, password);
 		prepareStatement1.setString(5,role);
-		prepareStatement1.executeUpdate();
-	}
-	public static void signUpDetails(String doctorName) throws ClassNotFoundException, SQLException
-	{
-		userName=ToDoList.userName();
-		nameOfDoctor=DoctorLogin.updateDoctor();
-		phoneNo=ToDoList.phoneNo();
-		email=ToDoList.emailId();
-		password=ToDoList.password1();
-		role=ToDoList.role(nameOfDoctor);
-		Connection connection=ConnectionUtil.getConnection();
-		String insert="insert into todo_register_login(username,doctor_name,phone_no,email_id,password,role)values(?,?,?,?,?,?)";
-		PreparedStatement prepareStatement1=connection.prepareStatement(insert);
-		prepareStatement1.setString(1,userName);
-		prepareStatement1.setString(2,nameOfDoctor);
-		prepareStatement1.setLong(3,phoneNo);
-		prepareStatement1.setString(4,email);
-		prepareStatement1.setString(5, password);
-		prepareStatement1.setString(6,role);
 		prepareStatement1.executeUpdate();
 	}
 	public  static void userInput() throws ClassNotFoundException, SQLException
@@ -94,8 +75,6 @@ public class NurseLogin
 				   		   System.out.println("Welcome to Doctor's ToDoList Reminder App");
 						   System.out.println(".........................................");
 				           ToDoList.work();
-//				           DoctorLogin doctor=new DoctorLogin();
-//				   	       doctor.doctorLogin();
 				           break;
 				default  :System.out.println("*Please enter choice 1-5*");
 				          NurseLogin.userInput();
@@ -142,7 +121,7 @@ public class NurseLogin
 			{
 				System.out.println("Age should be 1-100");
 				NurseLogin.patientAge();
-			}		
+			}	
 		}
 		else
 		{
@@ -185,6 +164,7 @@ public class NurseLogin
 			{
 				doctor.setPhoneNo(phoneNo);
 			}
+			connection.close();
 		}
 		else
 		{
@@ -238,6 +218,7 @@ public class NurseLogin
 		prepareStatement1.setString(9, doctor.getStatus());
 		System.out.println("Patient details : "+doctor.getPatientName()+" "+doctor.getAge()+" "+doctor.getDisease());
 		prepareStatement1.executeUpdate();
+		connection.close();
 	}
 	public static void displayAllPatients() throws ClassNotFoundException, SQLException
 	{
@@ -251,6 +232,7 @@ public class NurseLogin
 		{
 			System.out.println(resultSet.getInt(1)+"\t\t"+resultSet.getString(2)+"\t"+resultSet.getString(3)+"\t\t"+resultSet.getString(4)+"\t\t\t\t"+resultSet.getInt(5)+"\t\t\t"+resultSet.getLong(6)+"\t"+resultSet.getString(7)+"\t\t\t"+resultSet.getString(8)+"\t\t\t"+resultSet.getString(9)+"\t\t\t"+resultSet.getString(10));
 		}
+		connection.close();
 	}
 	public static void removePatient() throws ClassNotFoundException, SQLException
 	{
@@ -270,23 +252,20 @@ public class NurseLogin
 			{
 				System.out.println(rows+" Patient didn't come removed at tokenNo "+tokenNumber+" successfully");
 			}
-			else
-			{
-				try
-				{
-					throw new NoPatientAppointed();
-				}
-				catch(NoPatientAppointed n1)
-				{
-					System.out.println(n1.getMessage());
-					System.out.println("!!No patient appointed!! at tokenNo "+tokenNo);
-				}
-			}
 		}
 		else
 		{
-			System.out.println("=>Token Number should be positive and numeric");
+			try
+			{
+				throw new NoPatientAppointed();
+			}
+			catch(NoPatientAppointed n1)
+			{
+//				System.out.println(n1.getMessage());
+				System.out.println("!!No patient appointed!! at tokenNo "+tokenNo);
+			}
 			NurseLogin.removePatient();
+			connection.close();
 		}
 	}
 	public static void updatePatientdetail() throws ClassNotFoundException, SQLException
@@ -298,7 +277,7 @@ public class NurseLogin
 		if(tokenNo.matches(regex))
 		{
 			tokenNumber=Integer.parseInt(tokenNo);
-			System.out.println("1.Update PhoneNo\n2.Update Disease\n3.Update DoctorName\n4.Update DoctorCategory");
+			System.out.println("1.Update PhoneNo\n2.Update Disease\n3.Update DoctorName\n4.Update DoctorCategory\n5.Quit");
 			System.out.println("Please make a choice");
 			String choice=scanner.next();
 			scanner.nextLine();
@@ -318,18 +297,6 @@ public class NurseLogin
 						    {
 						    	System.out.println("Updated Successfully....");
 						    }
-						    else
-						    {
-						    	try
-								{
-									throw new NoPatientAppointed();
-								}
-								catch(NoPatientAppointed n1)
-								{
-									System.out.println(n1.getMessage());
-									System.out.println("!!No patient appointed!! at tokenNo "+tokenNo);
-								}
-						    }
 						    break;
 						    
 				     case 2:String updateDisease="update todo_list set disease=? where s_no=?";
@@ -341,18 +308,6 @@ public class NurseLogin
 					        if(row>0)
 						    {
 						    	System.out.println("Updated Successfully....");
-						    }
-						    else
-						    {
-						    	try
-								{
-									throw new NoPatientAppointed();
-								}
-								catch(NoPatientAppointed n1)
-								{
-									System.out.println(n1.getMessage());
-									System.out.println("!!No patient appointed!! at tokenNo "+tokenNo);
-								}
 						    }
 					        break;
 					        
@@ -366,18 +321,6 @@ public class NurseLogin
 						    {
 						    	System.out.println("Updated Successfully....");
 						    }
-						    else
-						    {
-						    	try
-								{
-									throw new NoPatientAppointed();
-								}
-								catch(NoPatientAppointed n1)
-								{
-									System.out.println(n1.getMessage());
-									System.out.println("!!No patient appointed!! at tokenNo "+tokenNo);
-								}
-						    }
 				            break;
 				     case 4:String updateDoctorCategory="update todo_list set doctor_category=? where s_no=?";
 				            String doctorCategory=DoctorLogin.updateDoctorCategory();;
@@ -389,23 +332,14 @@ public class NurseLogin
 						    {
 						    	System.out.println("Updated Successfully....");
 						    }
-						    else
-						    {
-						    	try
-								{
-									throw new NoPatientAppointed();
-								}
-								catch(NoPatientAppointed n1)
-								{
-									System.out.println(n1.getMessage());
-									System.out.println("!!No patient appointed!! at tokenNo "+tokenNo);
-								}
-						    }
 			                break;
+				     case 5:NurseLogin.userInput();
+				    	   break;
 				     default  :System.out.println("*Please enter choice 1-5*");
 			                   NurseLogin.updatePatientdetail();
 			                   break;
 				}
+				connection.close();
 			}
 			else
 			{
@@ -416,8 +350,17 @@ public class NurseLogin
 		}
 		else
 		{
-			System.out.println("=>Token Number should be positive and numeric");
+			try
+			{
+				throw new NoPatientAppointed();
+			}
+			catch(NoPatientAppointed n1)
+			{
+//				System.out.println(n1.getMessage());
+				System.out.println("!!No patient appointed!! at tokenNo "+tokenNo);
+			}
 			NurseLogin.updatePatientdetail();
 		}
+		connection.close();
 	}
 }

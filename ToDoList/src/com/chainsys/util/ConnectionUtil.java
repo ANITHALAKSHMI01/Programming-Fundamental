@@ -8,6 +8,7 @@ public class ConnectionUtil
 	{
 		Connection connection=ConnectionUtil.getConnection();
 		System.out.println(connection);
+		connection.close();
 	}
 	public static Connection getConnection()throws ClassNotFoundException, SQLException 
 	{
